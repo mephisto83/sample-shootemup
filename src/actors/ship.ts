@@ -68,8 +68,13 @@ export class Ship extends ex.Actor {
             if (stats.hp <= 0) {
                 stats.gameOver = true;
                 this.kill();
+                this.stopRegisteringFireThrottleEvent();
             }
          }
+    }
+
+    private stopRegisteringFireThrottleEvent = () => {
+        this.throttleFire = undefined;
     }
 
     onPostUpdate(engine: ex.Engine, delta: number) {
