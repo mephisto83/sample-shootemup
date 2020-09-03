@@ -49,7 +49,12 @@ export class Baddie extends ex.Actor {
                     .repeatForever();
 
         // Setup firing timer, repeats forever
-        this.fireTimer = new ex.Timer(() => { this.fire(engine) }, Config.enemyFireInterval, true, -1);
+        this.fireTimer = new ex.Timer({
+            fcn: () => { this. fire(engine) },
+            interval: Config.enemyFireInterval,
+            repeats: true,
+            numberOfRepeats: -1
+        });
         engine.addTimer(this.fireTimer);
 
     }

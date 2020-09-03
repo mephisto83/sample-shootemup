@@ -39,10 +39,15 @@ export class Game extends ex.Scene {
 
 
 
-        let baddieTimer = new ex.Timer(() => {
-            var bad = new Baddie(Math.random()*1000 + 200, -100, 80, 80);
-            engine.add(bad);    
-        }, Config.spawnTime, true, -1);
+        let baddieTimer = new ex.Timer({
+            fcn: () => {
+                var bad = new Baddie(Math.random()*1000 + 200, -100, 80, 80);
+                engine.add(bad);
+            },
+            interval: Config.spawnTime,
+            repeats: true,
+            numberOfRepeats: -1
+        });
 
         engine.addTimer(baddieTimer);
 
