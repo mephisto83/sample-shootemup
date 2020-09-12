@@ -51,7 +51,7 @@ export class Game extends ex.Scene {
 
         engine.addTimer(baddieTimer);
 
-        engine.on('preupdate', (evt: ex.PreUpdateEvent) => {
+        engine.on('preupdate', () => {
             if (stats.gameOver) {
                 engine.add(gameOverLabel);
             }
