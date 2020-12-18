@@ -1,15 +1,15 @@
 import * as ex from "excalibur";
 
-const fighterFile = require('../res/fighter.png');
-const enemyFile = require('../res/enemy.png');
-const spriteexplosionFile = require('../res/spriteexplosion.png');
-const gameSheetFile = require('../res/gameSheet.png');
-const laserFile = require('../res/laser.wav');
-const enemyfireFile = require('../res/enemyfire.wav');
-const explodeFile = require('../res/explode.wav');
-const hitFile = require('../res/hit.wav');
-const powerupFile = require('../res/powerup.wav');
-const rocketFile = require('../res/rocket.wav');
+import fighterFile from '../res/fighter.png';
+import enemyFile  from '../res/enemy.png';
+import spriteexplosionFile from '../res/spriteexplosion.png';
+import gameSheetFile from '../res/gameSheet.png';
+import laserFile from '../res/laser.wav';
+import enemyfireFile from '../res/enemyfire.wav';
+import explodeFile from '../res/explode.wav';
+import hitFile from '../res/hit.wav';
+import powerupFile from '../res/powerup.wav';
+import rocketFile from '../res/rocket.wav';
 
 
 const Images: { [key: string]: ex.Texture } = {

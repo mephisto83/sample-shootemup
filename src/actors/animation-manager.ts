@@ -24,7 +24,8 @@ export class AnimationManager extends ex.Actor {
         });
     }
 
-    onPostUpdate() {
+    onPostUpdate(engine: ex.Engine, elapsed: number) {
+        this.animations.forEach(a => a.anim.tick(elapsed, engine.stats.currFrame.id));
         this.animations = this.animations.filter(a => !a.anim.isDone());
     }
 
