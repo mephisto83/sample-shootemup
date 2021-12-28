@@ -4,6 +4,24 @@ import Config from './config';
 import { Sounds, loader } from './resources';
 import { Game } from './game';
 
+async function waitForFontLoad(font: string, timeout = 2000, interval = 100) {
+    return new Promise((resolve, reject) => {
+        // repeatedly poll check
+        const poller = setInterval(async () => {
+        try {
+            await document.fonts.load(font);
+        } catch (err) {
+            reject(err);
+        }
+        if (document.fonts.check(font)) {
+            clearInterval(poller);
+            resolve(true);
+        }
+        }, interval);
+        setTimeout(() => clearInterval(poller), timeout);
+    });
+}
+
 const engine = new ex.Engine({
     backgroundColor: ex.Color.Black,
     width: 1000,
@@ -34,12 +52,14 @@ engine.input.keyboard.on('press', (evt: ex.Input.KeyEvent) => {
     }
 });
 
-engine.start(loader).then(() => {
-   Sounds.laserSound.volume = Config.soundVolume;
-   Sounds.explodeSound.volume = Config.soundVolume;
-   Sounds.enemyFireSound.volume = Config.soundVolume;
-   Sounds.powerUp.volume = Config.soundVolume;
-   Sounds.rocketSound.volume = Config.soundVolume;
-   
-   console.log("Game Resources Loaded");
-});
+waitForFontLoad("normal 30px Open Sans").then(() => {
+    engine.start(loader).then(() => {
+        Sounds.laserSound.volume = Config.soundVolume;
+        Sounds.explodeSound.volume = Config.soundVolume;
+        Sounds.enemyFireSound.volume = Config.soundVolume;
+        Sounds.powerUp.volume = Config.soundVolume;
+        Sounds.rocketSound.volume = Config.soundVolume;
+        
+        console.log("Game Resources Loaded");
+    });
+})

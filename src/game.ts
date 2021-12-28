@@ -30,6 +30,7 @@ export class Game extends ex.Scene {
         });
         scoreLabel.font.quality = 3;
         scoreLabel.fontSize = 30;
+        scoreLabel.fontUnit = ex.FontUnit.Px;
         scoreLabel.fontFamily = "Open Sans";
         scoreLabel.transform.coordPlane = ex.CoordPlane.Screen;
         scoreLabel.color = ex.Color.Azure;
