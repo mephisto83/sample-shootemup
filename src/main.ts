@@ -5,13 +5,17 @@ import { Sounds, loader } from './resources';
 import { Game } from './game';
 
 const engine = new ex.Engine({
-    backgroundColor: ex.Color.Black
+    backgroundColor: ex.Color.Black,
+    width: 1000,
+    height: 800,
+    displayMode: ex.DisplayMode.FitScreen
 });
+engine.debug.entity.showName = true;
 engine.backgroundColor = ex.Color.Black;
 engine.setAntialiasing(false);
 
 // Setup game scene
-engine.add('game', new Game(engine));
+engine.add('game', new Game());
 engine.goToScene('game');
 
 // Game events to handle
@@ -26,7 +30,7 @@ engine.on('visible', () => {
 
 engine.input.keyboard.on('press', (evt: ex.Input.KeyEvent) => {
     if (evt.key === ex.Input.Keys.D) {
-      engine.isDebug = !engine.isDebug;
+      engine.toggleDebug();
     }
 });
 

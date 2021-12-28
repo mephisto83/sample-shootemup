@@ -6,6 +6,7 @@ import { animManager } from "./animation-manager";
 import { stats } from "../stats";
 
 export class Baddie extends ex.Actor {
+    public static group = ex.CollisionGroupManager.create('enemy');
     // All bullets belonging to baddies
     public static Bullets: Bullet[] = [];
 
@@ -21,7 +22,9 @@ export class Baddie extends ex.Actor {
         });
 
         // Passive recieves collision events but does not participate in resolution
-        this.body.collider.type = ex.CollisionType.Passive;
+        this.body.collisionType = ex.CollisionType.Passive;
+        // Enemy groups does not collide with itself
+        this.body.group = Baddie.group;
 
         // Setup listeners
         this.on('precollision', this.onPreCollision);
@@ -33,20 +36,19 @@ export class Baddie extends ex.Actor {
         // Initialize actor
 
         // Setup visuals
-        this.anim = gameSheet.getAnimationByIndices(engine, [10, 11, 12], 100)
+        this.anim = ex.Animation.fromSpriteSheet(gameSheet, [10, 11, 12], 100, ex.AnimationStrategy.Loop);
         this.anim.scale = new ex.Vector(4, 4);
-        this.addDrawing("default", this.anim);
+        this.graphics.use(this.anim);
 
-        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 40);
+        this.explode = ex.Animation.fromSpriteSheet(explosionSpriteSheet, ex.range(0, explosionSpriteSheet.sprites.length-1), 40, ex.AnimationStrategy.End);
         this.explode.scale = new ex.Vector(3, 3);
-        this.explode.loop = false;
 
         // Setup patrolling behavior
-        this.actions.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
-                    .moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
-                    .moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)
-                    .moveTo(this.pos.x, this.pos.y, Config.enemySpeed)
-                    .repeatForever();
+        this.actions.repeatForever(ctx => 
+            ctx.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
+               .moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
+               .moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)
+               .moveTo(this.pos.x, this.pos.y, Config.enemySpeed));
 
         // Setup firing timer, repeats forever
         this.fireTimer = new ex.Timer({
@@ -56,6 +58,7 @@ export class Baddie extends ex.Actor {
             numberOfRepeats: -1
         });
         engine.addTimer(this.fireTimer);
+        this.fireTimer.start();
 
     }
 
@@ -84,7 +87,7 @@ export class Baddie extends ex.Actor {
             Config.enemyBulletVelocity * Math.cos(this.fireAngle),
             Config.enemyBulletVelocity * Math.sin(this.fireAngle));
 
-        const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, this);
+        const bullet = new Bullet(this.pos.x, this.pos.y, bulletVelocity.x, bulletVelocity.y, Baddie.group);
         Baddie.Bullets.push(bullet);
         engine.add(bullet);
     }

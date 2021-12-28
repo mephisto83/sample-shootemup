@@ -1,5 +1,8 @@
 # Excalibur Shoot'em Up Sample
 
+Play now [here](https://excaliburjs.com/sample-shootemup)
+
+![example of shootem up running](./shmup.gif)
 ## Running locally
 
 * Using [nodejs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/)

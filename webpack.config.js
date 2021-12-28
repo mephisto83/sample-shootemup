@@ -1,8 +1,18 @@
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/main.ts',
     devtool: 'source-map',
+    devServer: {
+        port: 9000,
+        devMiddleware: {
+            writeToDisk: true
+        },
+        static: {
+            directory: path.resolve(__dirname)
+        }
+    },
     resolve: {
         extensions: ['.ts', '.js']
     },
@@ -11,6 +21,13 @@ module.exports = {
         sourceMapFilename: '[file].map',
         path: path.resolve(__dirname, 'dist')
     },
+    plugins: [
+        new CopyPlugin({
+            patterns: [
+              "index.html"
+            ],
+          }),
+    ],
     module: {
         rules: [
             {
@@ -21,12 +38,12 @@ module.exports = {
             {
                 test: /\.(png|jpg|bmp|wav|mp3)$/,
                 use: [{
-                  loader: 'file-loader',
-                  options: {
-                    emitFile: true
-                  }
+                    loader: 'file-loader',
+                    options: {
+                        emitFile: true
+                    }
                 }]
-              }
+            }
         ]
     }
 }

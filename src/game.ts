@@ -9,9 +9,10 @@ import Config from './config';
 import { animManager } from './actors/animation-manager';
 
 export class Game extends ex.Scene {
+    random = new ex.Random(1337); // seeded random
 
-    constructor(engine: ex.Engine) {
-        super(engine);
+    constructor() {
+        super();
     }
 
     onInitialize(engine: ex.Engine) {
@@ -23,25 +24,30 @@ export class Game extends ex.Scene {
         const healthBar = new HealthBar();
         engine.add(healthBar);
 
-        const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50);
+        const scoreLabel = new ex.Label({
+            text: "Score: " + stats.score,
+            pos: ex.vec(80, 50)
+        });
+        scoreLabel.font.quality = 3;
+        scoreLabel.fontSize = 30;
+        scoreLabel.transform.coordPlane = ex.CoordPlane.Screen;
         scoreLabel.color = ex.Color.Azure;
-        scoreLabel.scale = new ex.Vector(3, 3);
         scoreLabel.on('preupdate', function(this: ex.Label, evt){
             this.text = "Score: " + stats.score;
         });
         engine.add(scoreLabel);
 
 
-        const gameOverLabel = new ex.Label("Game Over", engine.halfDrawWidth - 250, engine.halfDrawHeight);
+        const gameOverLabel = new ex.Label({text:"Game Over", pos: ex.vec(engine.halfDrawWidth - 250, engine.halfDrawHeight) });
         gameOverLabel.color = ex.Color.Green.clone();
         gameOverLabel.scale = new ex.Vector(8,8);
-        gameOverLabel.actions.blink(1000, 1000, 400).repeatForever();
+        gameOverLabel.actions.repeatForever(ctx => ctx.blink(1000, 1000, 400));
 
 
 
         let baddieTimer = new ex.Timer({
             fcn: () => {
-                var bad = new Baddie(Math.random()*1000 + 200, -100, 80, 80);
+                var bad = new Baddie(this.random.floating(this.camera.viewport.left, this.camera.viewport.right), -100, 80, 80);
                 engine.add(bad);
             },
             interval: Config.spawnTime,
@@ -50,6 +56,7 @@ export class Game extends ex.Scene {
         });
 
         engine.addTimer(baddieTimer);
+        baddieTimer.start();
 
         engine.on('preupdate', () => {
             if (stats.gameOver) {

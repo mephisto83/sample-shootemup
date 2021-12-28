@@ -1,40 +1,40 @@
 import * as ex from "excalibur";
+import { Vector } from "excalibur";
 import Config from "../config";
 import { stats } from "../stats";
 
 export class HealthBar extends ex.Actor {
-
+    healthBarWidth = Config.healthBarWidth;
+    healthBarHeight = Config.healthBarHeight;
     constructor() {
         super({
+            name: "healthbar",
             color: ex.Color.Green,
-            pos: new ex.Vector(20, 0),
-            width: 0,
-            height: 0,
-            anchor: ex.Vector.Zero.clone(),
+            pos: new ex.Vector(20, 20),
         });
 
-        this.body.collider.type = ex.CollisionType.PreventCollision;
-    }
-    
-    onInitialize(engine: ex.Engine) {
-        this.pos = new ex.Vector(20,
-                        engine.drawHeight - Config.healthBarHeight - 20);
-        this.width = Config.healthBarWidth;
-        this.height = Config.healthBarHeight;
-        
+        this.transform.coordPlane = ex.CoordPlane.Screen;
+        this.body.collisionType = ex.CollisionType.PreventCollision
+        this.graphics.anchor = Vector.Zero;
+        this.graphics.add("default", new ex.Canvas({
+            draw: (ctx) => this.draw(ctx),
+            cache: false,
+            width: Config.healthBarWidth * 2,
+            height: Config.healthBarHeight * 3
+        }));
     }
 
     onPreUpdate() {
-        this.width = Config.healthBarWidth * (stats.hp / Config.totalHp);
+        this.healthBarWidth = Config.healthBarWidth * (stats.hp / Config.totalHp);
     }
 
-    onPostDraw(ctx: CanvasRenderingContext2D) {
-       ctx.strokeStyle = this.color.toString();
-       ctx.fillStyle = this.color.toString();
-       ctx.lineWidth = 3;
-       ctx.font = 'normal 30px sans-serif'
-       ctx.fillText("HP:", -5, - this.height);
-       ctx.strokeRect(-5, -5, Config.healthBarWidth + 10, this.height + 10);
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.strokeStyle = this.color.toString();
+        ctx.fillStyle = this.color.toString();
+        ctx.lineWidth = 3;
+        ctx.font = 'normal 30px sans-serif'
+        ctx.fillText("HP", 0, 30);
+        ctx.strokeRect(0, 35, Config.healthBarWidth + 10, Config.healthBarHeight + 10);
+        ctx.fillRect(5, 40, this.healthBarWidth, Config.healthBarHeight);
     }
-
 }

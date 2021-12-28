@@ -14,7 +14,7 @@ export class AnimationManager extends ex.Actor {
             height: 0,
             collisionType: ex.CollisionType.PreventCollision,
         });
-        this.traits.length = 0;
+        this.graphics.onPostDraw = (ctx) => this.drawAnimations(ctx);
     }
 
     play(animation: ex.Animation, pos: ex.Vector) {
@@ -26,13 +26,13 @@ export class AnimationManager extends ex.Actor {
 
     onPostUpdate(engine: ex.Engine, elapsed: number) {
         this.animations.forEach(a => a.anim.tick(elapsed, engine.stats.currFrame.id));
-        this.animations = this.animations.filter(a => !a.anim.isDone());
+        this.animations = this.animations.filter(a => !a.anim.done);
     }
 
     // PostDraw gives the rendering context and the time between frames
-    onPostDraw(ctx: CanvasRenderingContext2D/*, delta: number */) {
+    drawAnimations(ctx: ex.ExcaliburGraphicsContext/*, delta: number */) {
         for (let node of this.animations) {
-            node.anim.draw(ctx, node.pos.x - node.anim.drawWidth / 2, node.pos.y -node.anim.drawHeight / 2);
+            node.anim.draw(ctx, node.pos.x - node.anim.width / 2, node.pos.y -node.anim.height / 2);
         }
     }
 }

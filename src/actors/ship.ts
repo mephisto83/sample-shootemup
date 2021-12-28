@@ -21,6 +21,7 @@ const throttle = function(this: any, func: FireFunction, throttle: number): Fire
  }
 
 export class Ship extends ex.Actor {
+    static group = ex.CollisionGroupManager.create('player');
     private flipBarrel = false;
     private throttleFire?: FireFunction;
     private explode?: ex.Animation;
@@ -31,7 +32,9 @@ export class Ship extends ex.Actor {
             height: height,
         });
 
-        this.body.collider.type = ex.CollisionType.Passive;
+        this.body.collisionType = ex.CollisionType.Passive;
+        // Player group does not collide with itself
+        this.body.group = Ship.group;
     }
 
     onInitialize(engine: ex.Engine) {
@@ -51,13 +54,12 @@ export class Ship extends ex.Actor {
         engine.input.pointers.primary.on('up', () => this.vel = ex.Vector.Zero.clone());
 
         // Get animation
-        const anim = gameSheet.getAnimationByIndices(engine, [0, 1, 2], 100);
+        const anim = ex.Animation.fromSpriteSheet(gameSheet, [0, 1, 2], 100, ex.AnimationStrategy.Loop);
         anim.scale = new ex.Vector(4, 4);
-        this.addDrawing("default", anim);
+        this.graphics.use(anim);
 
-        this.explode = explosionSpriteSheet.getAnimationForAll(engine, 40);
+        this.explode = ex.Animation.fromSpriteSheet(explosionSpriteSheet, ex.range(0, explosionSpriteSheet.sprites.length - 1), 40, ex.AnimationStrategy.End);
         this.explode.scale = new ex.Vector(3, 3);
-        this.explode.loop = false;
     }
 
     onPreCollision(evt: ex.PreCollisionEvent) {
@@ -94,7 +96,7 @@ export class Ship extends ex.Actor {
     }
 
     private fire = (engine: ex.Engine) => {
-        let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
+        let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, Ship.group);
         this.flipBarrel = !this.flipBarrel;
         Sounds.laserSound.play();
         engine.add(bullet);
@@ -103,7 +105,7 @@ export class Ship extends ex.Actor {
     handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerDownEvent) => {
 
         let dir = evt.worldPos.sub(this.pos);
-        let distance = dir.magnitude();
+        let distance = dir.size;
         if (distance > 50) {
             this.vel = dir.scale(Config.playerSpeed/distance);
         } else {
