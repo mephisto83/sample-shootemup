@@ -39,7 +39,7 @@ export class Ship extends ex.Actor {
 
     onInitialize(engine: ex.Engine) {
         this.throttleFire = throttle(this.fire, Config.playerFireThrottle);
-        this.on('precollision', this.onPreCollision);
+        this.on('precollision', (evt) => this.onPreCollision(evt));
 
         // Keyboard
         engine.input.keyboard.on('hold', (evt) => this.handleKeyEvent(engine, evt));
@@ -50,7 +50,7 @@ export class Ship extends ex.Actor {
          });
 
         // Pointer
-        engine.input.pointers.primary.on('down', (evt) => this.handlePointerEvent(engine, <ex.Input.PointerDownEvent>evt));
+        engine.input.pointers.primary.on('down', (evt) => this.handlePointerEvent(engine, evt));
         engine.input.pointers.primary.on('up', () => this.vel = ex.Vector.Zero.clone());
 
         // Get animation
@@ -102,8 +102,7 @@ export class Ship extends ex.Actor {
         engine.add(bullet);
     }
 
-    handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerDownEvent) => {
-
+    handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerEvent) => {
         let dir = evt.worldPos.sub(this.pos);
         let distance = dir.size;
         if (distance > 50) {

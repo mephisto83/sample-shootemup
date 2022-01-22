@@ -19,7 +19,7 @@ export class AnimationManager extends ex.Actor {
 
     play(animation: ex.Animation, pos: ex.Vector) {
         this.animations.push({
-            anim: animation,
+            anim: animation.clone(),
             pos: pos.clone()
         });
     }

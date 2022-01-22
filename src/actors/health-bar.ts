@@ -16,11 +16,11 @@ export class HealthBar extends ex.Actor {
         this.transform.coordPlane = ex.CoordPlane.Screen;
         this.body.collisionType = ex.CollisionType.PreventCollision
         this.graphics.anchor = Vector.Zero;
-        this.graphics.add("default", new ex.Canvas({
+        this.graphics.use(new ex.Canvas({
             draw: (ctx) => this.draw(ctx),
             cache: false,
-            width: Config.healthBarWidth * 2,
-            height: Config.healthBarHeight * 3
+            width: Config.healthBarWidth + 10,
+            height: Config.healthBarHeight + 40
         }));
     }
 

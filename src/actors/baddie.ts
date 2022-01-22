@@ -27,7 +27,7 @@ export class Baddie extends ex.Actor {
         this.body.group = Baddie.group;
 
         // Setup listeners
-        this.on('precollision', this.onPreCollision);
+        this.on('precollision', (evt) => this.onPreCollision(evt));
 
     }
 

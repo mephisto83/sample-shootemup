@@ -16,7 +16,7 @@ export class Bullet extends ex.Actor {
     }
     
     onInitialize(engine: ex.Engine) {
-        this.on('precollision', this.onPreCollision);
+        this.on('precollision', (evt) => this.onPreCollision(evt));
         // Clean up on exit viewport
         this.on('exitviewport', () => this.killAndRemoveFromBullets());
 

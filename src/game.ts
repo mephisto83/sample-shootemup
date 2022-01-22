@@ -41,8 +41,10 @@ export class Game extends ex.Scene {
 
 
         const gameOverLabel = new ex.Label({text:"Game Over", pos: ex.vec(engine.halfDrawWidth - 250, engine.halfDrawHeight) });
+        gameOverLabel.font.quality = 4;
+        gameOverLabel.font.size = 60;
         gameOverLabel.color = ex.Color.Green.clone();
-        gameOverLabel.scale = new ex.Vector(8,8);
+        gameOverLabel.scale = new ex.Vector(2, 2);
         gameOverLabel.actions.repeatForever(ctx => ctx.blink(1000, 1000, 400));
 
 
