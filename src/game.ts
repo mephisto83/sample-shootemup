@@ -8,6 +8,9 @@ import Config from './config';
 
 import { animManager } from './actors/animation-manager';
 
+
+import { DevTool } from '@excaliburjs/dev-tools';
+
 export class Game extends ex.Scene {
     random = new ex.Random(1337); // seeded random
 
@@ -16,6 +19,9 @@ export class Game extends ex.Scene {
     }
 
     onInitialize(engine: ex.Engine) {
+        const devtool = new DevTool(engine);
+        devtool.pane.expanded = false;
+
         engine.add(animManager);
 
         const ship = new Ship(engine.halfDrawWidth, 800, 80, 80);
