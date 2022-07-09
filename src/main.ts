@@ -24,6 +24,7 @@ async function waitForFontLoad(font: string, timeout = 2000, interval = 100) {
 
 const engine = new ex.Engine({
     backgroundColor: ex.Color.Black,
+    pixelRatio: 2,
     width: 1000,
     height: 800,
     displayMode: ex.DisplayMode.FitScreen

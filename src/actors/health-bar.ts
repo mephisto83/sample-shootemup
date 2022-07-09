@@ -19,8 +19,8 @@ export class HealthBar extends ex.Actor {
         this.graphics.use(new ex.Canvas({
             draw: (ctx) => this.draw(ctx),
             cache: false,
-            width: Config.healthBarWidth + 10,
-            height: Config.healthBarHeight + 40
+            width: Config.healthBarWidth + 20,
+            height: Config.healthBarHeight + 50
         }));
     }
 

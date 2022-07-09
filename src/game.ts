@@ -27,10 +27,10 @@ export class Game extends ex.Scene {
             text: "Score: " + stats.score,
             pos: ex.vec(80, 50)
         });
-        scoreLabel.font.quality = 3;
-        scoreLabel.fontSize = 30;
-        scoreLabel.fontUnit = ex.FontUnit.Px;
-        scoreLabel.fontFamily = "Open Sans";
+        scoreLabel.font.quality = 4;
+        scoreLabel.font.size = 30;
+        scoreLabel.font.unit = ex.FontUnit.Px;
+        scoreLabel.font.family = "Open Sans";
         scoreLabel.transform.coordPlane = ex.CoordPlane.Screen;
         scoreLabel.color = ex.Color.Azure;
         scoreLabel.on('preupdate', function(this: ex.Label, evt){
