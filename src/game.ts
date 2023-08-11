@@ -33,8 +33,8 @@ export class Game extends ex.Scene {
         scoreLabel.font.family = "Open Sans";
         scoreLabel.transform.coordPlane = ex.CoordPlane.Screen;
         scoreLabel.color = ex.Color.Azure;
-        scoreLabel.on('preupdate', function(this: ex.Label, evt){
-            this.text = "Score: " + stats.score;
+        scoreLabel.on('preupdate', (evt) => {
+            scoreLabel.text = "Score: " + stats.score;
         });
         engine.add(scoreLabel);
 
