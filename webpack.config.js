@@ -6,7 +6,7 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         port: 9000,
-        allowHosts: 'all',
+        allowedHosts: 'all',
         devMiddleware: {
             writeToDisk: true
         },
