@@ -1,9 +1,9 @@
 import * as ex from "excalibur";
 
 import fighterFile from '../res/fighter.png';
-import enemyFile  from '../res/enemy.png';
+import enemyFile from '../res/enemy.png';
 import spriteexplosionFile from '../res/spriteexplosion.png';
-import gameSheetFile from '../res/gameSheet.png';
+import gameSheetFile from '../res/updated_sprite_sheet.png';
 import laserFile from '../res/laser.wav';
 import enemyfireFile from '../res/enemyfire.wav';
 import explodeFile from '../res/explode.wav';
@@ -28,7 +28,7 @@ const Sounds: { [key: string]: ex.Sound } = {
     rocketSound: new ex.Sound(rocketFile),
 }
 
-const explosionSpriteSheet = ex.SpriteSheet.fromImageSource({ 
+const explosionSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Images.explosion,
     grid: {
         rows: 5,
@@ -38,17 +38,17 @@ const explosionSpriteSheet = ex.SpriteSheet.fromImageSource({
     }
 });
 const gameSheet = ex.SpriteSheet.fromImageSource({
-    image: Images.sheet, 
+    image: Images.sheet,
     grid: {
         rows: 10,
         columns: 10,
-        spriteWidth: 32, 
-        spriteHeight: 32
+        spriteWidth: 32 * 4,
+        spriteHeight: 32 * 4
     }
 });
 
 const loader = new ex.Loader();
-const allResources = {...Images, ...Sounds};
+const allResources = { ...Images, ...Sounds };
 for (const res in allResources) {
     loader.addResource(allResources[res]);
 }

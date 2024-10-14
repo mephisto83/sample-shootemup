@@ -14,14 +14,14 @@ export class Bullet extends ex.Actor {
         this.body.collisionType = ex.CollisionType.Passive;
         this.body.group = collisiongGroup;
     }
-    
+
     onInitialize(engine: ex.Engine) {
         this.on('precollision', (evt) => this.onPreCollision(evt));
         // Clean up on exit viewport
         this.on('exitviewport', () => this.killAndRemoveFromBullets());
 
         const anim = ex.Animation.fromSpriteSheet(gameSheet, [3, 4, 5, 6, 7, 8, 7, 6, 5, 4], 100, ex.AnimationStrategy.Loop);
-        anim.scale = new ex.Vector(2, 2);
+        anim.scale = new ex.Vector(2 / 4, 2 / 4);
         this.graphics.use(anim);
     }
 

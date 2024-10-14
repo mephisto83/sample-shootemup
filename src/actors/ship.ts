@@ -7,18 +7,18 @@ import { animManager } from "./animation-manager";
 import { stats } from "../stats";
 
 type FireFunction = (engine: ex.Engine) => void;
-const throttle = function(this: any, func: FireFunction, throttle: number): FireFunction {
+const throttle = function (this: any, func: FireFunction, throttle: number): FireFunction {
     var lastTime = Date.now();
     var throttle = throttle;
     return (engine: ex.Engine) => {
-       var currentTime = Date.now();
-       if(currentTime - lastTime > throttle){
-          var val = func.apply(this, [engine]);
-          lastTime = currentTime;
-          return val;
-       }
+        var currentTime = Date.now();
+        if (currentTime - lastTime > throttle) {
+            var val = func.apply(this, [engine]);
+            lastTime = currentTime;
+            return val;
+        }
     }
- }
+}
 
 export class Ship extends ex.Actor {
     static group = ex.CollisionGroupManager.create('player');
@@ -43,11 +43,11 @@ export class Ship extends ex.Actor {
 
         // Keyboard
         engine.input.keyboard.on('hold', (evt) => this.handleKeyEvent(engine, evt));
-        engine.input.keyboard.on('release', (evt: ex.Input.KeyEvent) => { 
-            if(evt.key !== ex.Input.Keys.Space) {
+        engine.input.keyboard.on('release', (evt: ex.Input.KeyEvent) => {
+            if (evt.key !== ex.Input.Keys.Space) {
                 this.vel = ex.Vector.Zero.clone()
             }
-         });
+        });
 
         // Pointer
         engine.input.pointers.primary.on('down', (evt) => this.handlePointerEvent(engine, evt));
@@ -55,7 +55,7 @@ export class Ship extends ex.Actor {
 
         // Get animation
         const anim = ex.Animation.fromSpriteSheet(gameSheet, [0, 1, 2], 100, ex.AnimationStrategy.Loop);
-        anim.scale = new ex.Vector(4, 4);
+        anim.scale = new ex.Vector(4 / 4, 4 / 4);
         this.graphics.use(anim);
 
         this.explode = ex.Animation.fromSpriteSheet(explosionSpriteSheet, ex.range(0, explosionSpriteSheet.sprites.length - 1), 40, ex.AnimationStrategy.End);
@@ -63,7 +63,7 @@ export class Ship extends ex.Actor {
     }
 
     onPreCollision(evt: ex.PreCollisionEvent) {
-        if(evt.other instanceof Baddie || ex.Util.contains(Baddie.Bullets, evt.other)){
+        if (evt.other instanceof Baddie || ex.Util.contains(Baddie.Bullets, evt.other)) {
             Sounds.hitSound.play();
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
@@ -72,7 +72,7 @@ export class Ship extends ex.Actor {
                 this.kill();
                 this.stopRegisteringFireThrottleEvent();
             }
-         }
+        }
     }
 
     private stopRegisteringFireThrottleEvent = () => {
@@ -86,17 +86,17 @@ export class Ship extends ex.Actor {
             animManager.play(this.explode, this.pos);
             Sounds.explodeSound.play();
             this.kill();
-         }
+        }
 
         // Keep player in the viewport
-       if(this.pos.x < 0) this.pos.x = 0;
-       if(this.pos.y < 0) this.pos.y = 0;
-       if(this.pos.x > engine.drawWidth - this.width) this.pos.x = (engine.drawWidth - this.width);
-       if(this.pos.y > engine.drawHeight - this.height) this.pos.y = (engine.drawHeight - this.height);
+        if (this.pos.x < 0) this.pos.x = 0;
+        if (this.pos.y < 0) this.pos.y = 0;
+        if (this.pos.x > engine.drawWidth - this.width) this.pos.x = (engine.drawWidth - this.width);
+        if (this.pos.y > engine.drawHeight - this.height) this.pos.y = (engine.drawHeight - this.height);
     }
 
     private fire = (engine: ex.Engine) => {
-        let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, Ship.group);
+        let bullet = new Bullet(this.pos.x + (this.flipBarrel ? -40 : 40), this.pos.y - 20, 0, Config.playerBulletVelocity, Ship.group);
         this.flipBarrel = !this.flipBarrel;
         Sounds.laserSound.play();
         engine.add(bullet);
@@ -106,7 +106,7 @@ export class Ship extends ex.Actor {
         let dir = evt.worldPos.sub(this.pos);
         let distance = dir.size;
         if (distance > 50) {
-            this.vel = dir.scale(Config.playerSpeed/distance);
+            this.vel = dir.scale(Config.playerSpeed / distance);
         } else {
             this.throttleFire ? this.throttleFire(engine) : null;
         }
@@ -138,7 +138,7 @@ export class Ship extends ex.Actor {
         }
 
         if (evt.key === ex.Input.Keys.Down ||
-            evt.key ===  ex.Input.Keys.S) {
+            evt.key === ex.Input.Keys.S) {
             dir.y += 1;
         }
 

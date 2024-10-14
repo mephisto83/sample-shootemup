@@ -37,22 +37,22 @@ export class Baddie extends ex.Actor {
 
         // Setup visuals
         this.anim = ex.Animation.fromSpriteSheet(gameSheet, [10, 11, 12], 100, ex.AnimationStrategy.Loop);
-        this.anim.scale = new ex.Vector(4, 4);
+        this.anim.scale = new ex.Vector(4 / 4, 4 / 4);
         this.graphics.use(this.anim);
 
-        this.explode = ex.Animation.fromSpriteSheet(explosionSpriteSheet, ex.range(0, explosionSpriteSheet.sprites.length-1), 40, ex.AnimationStrategy.End);
+        this.explode = ex.Animation.fromSpriteSheet(explosionSpriteSheet, ex.range(0, explosionSpriteSheet.sprites.length - 1), 40, ex.AnimationStrategy.End);
         this.explode.scale = new ex.Vector(3, 3);
 
         // Setup patrolling behavior
-        this.actions.repeatForever(ctx => 
+        this.actions.repeatForever(ctx =>
             ctx.moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
-               .moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
-               .moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)
-               .moveTo(this.pos.x, this.pos.y, Config.enemySpeed));
+                .moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
+                .moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)
+                .moveTo(this.pos.x, this.pos.y, Config.enemySpeed));
 
         // Setup firing timer, repeats forever
         this.fireTimer = new ex.Timer({
-            fcn: () => { this. fire(engine) },
+            fcn: () => { this.fire(engine) },
             interval: Config.enemyFireInterval,
             repeats: true,
             numberOfRepeats: -1
@@ -65,8 +65,8 @@ export class Baddie extends ex.Actor {
     // Fires before excalibur collision resolution
     private onPreCollision(evt: ex.PreCollisionEvent) {
         // only kill a baddie if it collides with something that isn't a baddie or a baddie bullet
-        if(!(evt.other instanceof Baddie) &&
-           !ex.Util.contains(Baddie.Bullets, evt.other)) {
+        if (!(evt.other instanceof Baddie) &&
+            !ex.Util.contains(Baddie.Bullets, evt.other)) {
             Sounds.explodeSound.play();
             if (this.explode) {
                 animManager.play(this.explode, this.pos);
@@ -77,12 +77,12 @@ export class Baddie extends ex.Actor {
                 this.fireTimer.cancel();
             }
             this.kill();
-         }
+        }
     }
 
 
     private fire(engine: ex.Engine) {
-        this.fireAngle += Math.PI/20;
+        this.fireAngle += Math.PI / 20;
         const bulletVelocity = new ex.Vector(
             Config.enemyBulletVelocity * Math.cos(this.fireAngle),
             Config.enemyBulletVelocity * Math.sin(this.fireAngle));
